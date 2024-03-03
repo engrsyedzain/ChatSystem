@@ -1,0 +1,22 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<form method="post">
+    <div class="text-center">
+        <h1 class="display-4">Welcome to the Chat system</h1>
+
+        <div class="row">
+            <div class="col-3">
+                <label class="m-2">Email</label>
+                <input type="text" class="form-control" asp-for="@Model.Email" />
+                <p class="text-danger">@Model.Error</p>
+            </div>
+            <div class="col-3 m-3">
+                <br />
+                <button type="submit" class="btn btn-primary float-start">Login</button>
+            </div>
+        </div>
+    </div>
+</form>
