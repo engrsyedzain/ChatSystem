@@ -15,9 +15,9 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddSignalR((e => {
-    e.MaximumReceiveMessageSize = 102400000;
-}));
+
+builder.Services.AddSignalR();
+
 
 
 var app = builder.Build();

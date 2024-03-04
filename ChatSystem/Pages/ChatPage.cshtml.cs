@@ -1,4 +1,4 @@
-using ChatSystem.Models;
+﻿using ChatSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,25 +17,29 @@ namespace ChatSystem.Pages
         };
 
         public Member Member { get; set; }
-        public IEnumerable<Member> Members { get; set; }
-        public string SenderId { get; set; } 
 
+        public IEnumerable<Member> Members { get; set; }
+
+        public string SenderId { get; set; }
+
+        [BindProperty]
+        public List<SelectListItem> Users { get; set; }
+
+        [BindProperty]
+        public string MyUser { get; set; }
         public void OnGet()
         {
             string email = HttpContext.Session.GetString(Sessions.Member);
-            Member = members.SingleOrDefault(m => m.Email == email);
+            Users = members.Where(m => m.Email != email).ToList()
+                .Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString() })
+                .OrderBy(s => s.Text).ToList();
 
             Members = members.Where(m => m.Email != email).ToList();
-            SenderId = Member?.Id.ToString() ?? "";
 
+            Member = members.SingleOrDefault(m => m.Email == email);
 
-            //   Users = members.Where(m => m.Email != email).ToList()
-            //.Select(a => new SelectListItem { Text = a.Name, Value = a.Name })
-            //.OrderBy(s => s.Text).ToList();
-
-            //   SenderId = Member.Id;
-            //   HttpContext.Session.SetInt32(Sessions.MemberId, SenderId);
-
+            MyUser = Member.Name;
         }
+
     }
 }
