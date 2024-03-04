@@ -1,0 +1,63 @@
+﻿@page
+@model ChatSystem.Pages.MembersModel
+@{
+}
+
+
+<h1>Welcome @Model.Member?.Name</h1>
+
+@if(!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model.Members)
+        {
+            <tr>
+                <td>@member.MemberId</td>
+                <td>@member.Name</td>
+                <td>@member.Email</td>
+                <td>
+                    <form method="post" asp-page-handler="Invite" asp-route-memberId="@member.MemberId">
+                        <button type="submit" class="btn btn-primary btn-sm">Invite</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts
+{
+
+
+    <script>
+
+        function inviteMember(memberId) {
+            $.ajax({
+                type: "POST",
+                url: "/Members/InviteMember", // Replace with your page and method name
+                data: { memberId: memberId },
+                success: function (response) {
+                    // Handle success response if needed
+                    alert("Invitation sent successfully!");
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response if needed
+                    alert("Error occurred while sending invitation!");
+                }
+            });
+        }
+    </script>
+}
+
+

@@ -7,19 +7,12 @@ namespace ChatSystem.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-
-
-        List<Member> members = new List<Member>
-        {
-            new Member { Id = 1001, Name = "Syed Zain", Email = "zain@domain.com" },
-            new Member { Id = 1002, Name = "Shariq", Email = "shariq@domain.com" },
-            new Member { Id = 1003, Name = "Talha", Email = "talha@domain.com" },
-            new Member { Id = 1004, Name = "Shoaib", Email = "shoaib@domain.com" }
-            // Add more members as needed
-        };
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly AppDbContext _context;
+      
+        public IndexModel(ILogger<IndexModel> logger, AppDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -34,13 +27,18 @@ namespace ChatSystem.Pages
 
         }
 
+
+       
+
+
         public IActionResult OnPost()
         {
-            var member = members.FirstOrDefault(m => m.Email == Email);
+            
+            var member = _context.Members.FirstOrDefault(m => m.Email == Email);
             if(member != null)
             {
                 HttpContext.Session.SetString(Sessions.Member, member.Email);
-                return RedirectToPage("/ChatPage");
+                return RedirectToPage("/Members");
             }
             else
             {

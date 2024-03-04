@@ -9,10 +9,10 @@ namespace ChatSystem.Pages
     {
         List<Member> members = new List<Member>
         {
-            new Member { Id = 1001, Name = "Syed Zain", Email = "zain@domain.com" },
-            new Member { Id = 1002, Name = "Shariq", Email = "shariq@domain.com" },
-            new Member { Id = 1003, Name = "Talha", Email = "talha@domain.com" },
-            new Member { Id = 1004, Name = "Shoaib", Email = "shoaib@domain.com" }
+            new Member { MemberId = 1001, Name = "Syed Zain", Email = "zain@domain.com" },
+            new Member { MemberId = 1002, Name = "Shariq", Email = "shariq@domain.com" },
+            new Member { MemberId = 1003, Name = "Talha", Email = "talha@domain.com" },
+            new Member { MemberId = 1004, Name = "Shoaib", Email = "shoaib@domain.com" }
             // Add more members as needed
         };
 
@@ -31,7 +31,7 @@ namespace ChatSystem.Pages
         {
             string email = HttpContext.Session.GetString(Sessions.Member);
             Users = members.Where(m => m.Email != email).ToList()
-                .Select(a => new SelectListItem { Text = a.Name, Value = a.Id.ToString() })
+                .Select(a => new SelectListItem { Text = a.Name, Value = a.MemberId.ToString() })
                 .OrderBy(s => s.Text).ToList();
 
             Members = members.Where(m => m.Email != email).ToList();
