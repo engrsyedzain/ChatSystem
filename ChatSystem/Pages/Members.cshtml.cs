@@ -2,6 +2,7 @@ using ChatSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatSystem.Pages
 {
@@ -18,6 +19,8 @@ namespace ChatSystem.Pages
         public Member Member { get; set; }
         public IEnumerable<Member> Members { get; set; }
 
+        public IEnumerable<Invitation> Invitations { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int MemberId { get; set; }
 
@@ -31,7 +34,7 @@ namespace ChatSystem.Pages
             //var InviteMember = _context.Members.SingleOrDefault(m => m.MemberId == memberId);
 
             var invite = _context.Invitations.SingleOrDefault(i => i.SenderId == currentMember.MemberId && i.ReceiverId == memberId);
-            if (invite == null)
+            if (invite != null)
             {
                 Error = "Invitation already sent";                
             }
@@ -60,6 +63,9 @@ namespace ChatSystem.Pages
 
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
 
+            Invitations =  _context.Invitations
+                .Where(m => m.ReceiverId == Member.MemberId)
+                .Include(s => s.Sender);
             
         }
     }
