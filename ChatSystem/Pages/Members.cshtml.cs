@@ -61,9 +61,6 @@ namespace ChatSystem.Pages
 
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
 
-            Invitations =  _context.Invitations
-                .Where(m => m.ReceiverId == Member.MemberId)
-                .Include(s => s.Sender);
             
         }
     }
