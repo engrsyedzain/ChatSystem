@@ -18,9 +18,7 @@ namespace ChatSystem.Pages
         [BindProperty(SupportsGet = true)]
         public Member Member { get; set; }
         public IEnumerable<Member> Members { get; set; }
-
-        public IEnumerable<Invitation> Invitations { get; set; }
-
+        
         [BindProperty(SupportsGet = true)]
         public int MemberId { get; set; }
 
