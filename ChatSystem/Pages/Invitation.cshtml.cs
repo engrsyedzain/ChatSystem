@@ -15,9 +15,36 @@ namespace ChatSystem.Pages
         }
 
         public IEnumerable<Invitation> Invitations { get; set; }
+        public IEnumerable<Invitation> InvitationAccepted { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public Member Member { get; set; }
+
+
+        [BindProperty]
+        public string Error { get; set; }
+
+        public IActionResult OnPostInvite(int invitationId)
+        {
+            string email = HttpContext.Session.GetString(Sessions.Member);
+            var currentMember = _context.Members.SingleOrDefault(m => m.Email == email);
+            //var InviteMember = _context.Members.SingleOrDefault(m => m.MemberId == memberId);
+
+            var invite = _context.Invitations.SingleOrDefault(i => i.InvitationId == invitationId);
+            if (invite == null)
+            {
+                Error = "Invitation already approved";
+            }
+            else
+            {
+                invite.StatusId = 2;                
+                _context.SaveChanges();
+            }
+
+
+            return RedirectToPage();
+        }
+
 
         public void OnGet()
         {
@@ -25,7 +52,11 @@ namespace ChatSystem.Pages
 
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
             Invitations = _context.Invitations
-                .Where(m => m.ReceiverId == Member.MemberId)
+                .Where(m => m.ReceiverId == Member.MemberId && m.StatusId == 1)
+                .Include(s => s.Sender);
+
+            InvitationAccepted = _context.Invitations
+                .Where(m => m.ReceiverId == Member.MemberId && m.StatusId != 1)
                 .Include(s => s.Sender);
         }
     }

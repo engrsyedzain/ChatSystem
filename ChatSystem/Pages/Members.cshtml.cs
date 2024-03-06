@@ -1,4 +1,5 @@
 using ChatSystem.Models;
+using ChatSystem.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -57,10 +58,9 @@ namespace ChatSystem.Pages
         {
             string email = HttpContext.Session.GetString(Sessions.Member);          
 
-            Members = _context.Members.Where(m => m.Email != email).ToList();
+            Members =  _context.Members.Where(m => m.Email != email).ToList();
 
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
-
             
         }
     }

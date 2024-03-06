@@ -1,0 +1,50 @@
+﻿@page
+@model ChatSystem.Pages.ChatModel
+@{
+}
+<h2>Chat</h2>
+
+
+
+<label id="myConnectionId" class="text-danger"></label>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2">Receiver</div>
+        @* <div class="col-4">@Html.DropDownList("receiver", Model.Users)</div> *@
+        <div class="col-4">
+            <select id="receiver">
+                @foreach (var item in Model.Members)
+                {
+                    <option value="@item.MemberId">@item.Name</option>
+                }
+            </select>
+        </div>
+
+
+    </div>
+   
+    <div class="row">
+        <div class="col-2">Message</div>
+        <div class="col-4"><input type="text" id="message" value="Hi" /></div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="sendMessage" value="Send Message" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("sender", Model.MyUser) <!--Current logged in username-->
+@section Scripts
+{
+
+    <script src="~/lib/microsoft-signalr/signalr.js"></script>
+    <script src="~/js/chat1.js" asp-append-version="true"></script>
+}
