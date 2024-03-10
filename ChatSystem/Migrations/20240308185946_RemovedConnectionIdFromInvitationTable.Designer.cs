@@ -4,6 +4,7 @@ using ChatSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308185946_RemovedConnectionIdFromInvitationTable")]
+    partial class RemovedConnectionIdFromInvitationTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,27 +93,6 @@ namespace ChatSystem.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("ChatSystem.Models.MemberConnection", b =>
-                {
-                    b.Property<int>("MemberConnectionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemberConnectionId"), 1L, 1);
-
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MemberConnectionId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("MemberConnections");
-                });
-
             modelBuilder.Entity("ChatSystem.Models.Message", b =>
                 {
                     b.Property<int>("MessageId")
@@ -169,17 +150,6 @@ namespace ChatSystem.Migrations
                     b.Navigation("Sender");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("ChatSystem.Models.MemberConnection", b =>
-                {
-                    b.HasOne("ChatSystem.Models.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("ChatSystem.Models.Message", b =>

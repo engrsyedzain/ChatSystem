@@ -2,46 +2,73 @@
 @model ChatSystem.Pages.ChatModel
 @{
 }
-<h2>Chat</h2>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<h2>Chat with @Model.Receiver.Name</h2>
 
 
 
-<label id="myConnectionId" class="text-danger"></label>
+@* <label id="myConnectionId" class="text-danger"></label> *@
 
 <div class="container">
     <div class="row">
-        <div class="col-2">Receiver</div>
+        @* <div class="col-2">Receiver</div> *@
         @* <div class="col-4">@Html.DropDownList("receiver", Model.Users)</div> *@
         <div class="col-4">
-            <select id="receiver">
+           @*  <select id="receiver">
                 @foreach (var item in Model.Members)
                 {
                     <option value="@item.MemberId">@item.Name</option>
                 }
-            </select>
+            </select> *@
         </div>
 
 
     </div>
-   
-    <div class="row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="message" value="Hi" /></div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" id="sendMessage" value="Send Message" />
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <ul id="messagesList" class="list-group">
+                    @foreach (var msg in Model.Messages)
+                    {
+                        if(msg.SenderId == Model.Sender.MemberId)
+                        {
+                            <li class="align-items-end d-flex flex-column list-group-item">
+                                <span class="h5 mb-0 text-success"><b>@msg.Sender.Name:</b> @msg.MessageText</span>
+                                <span style="font-size:10px;">@msg.CreatedDate.ToString("dd/MMM/yyyy : hh:mm:ss tt")</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="align-items-start d-flex flex-column list-group-item">
+                                <span class="h5 mb-0  text-danger"><b>@msg.Sender.Name:</b> @msg.MessageText</span>
+                                <span style="font-size:10px;">@msg.CreatedDate.ToString("dd/MMM/yyyy : hh:mm:ss tt")</span>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="message" placeholder="Type your message here...">
+                    <button type="button" class="btn btn-primary" id="sendMessage">
+                        <i class="bi bi-send"></i><!-- Assuming you're using Bootstrap Icons -->
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="row">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
 </div>
 
-@Html.Hidden("sender", Model.MyUser) <!--Current logged in username-->
+@Html.Hidden("senderId", Model.Sender.MemberId) <!--Current logged in username-->
+@Html.Hidden("sender", Model.Sender.Name) <!--Current logged in username-->
+@Html.Hidden("receiverId", Model.Receiver.MemberId) <!--Current logged in username-->
+@Html.Hidden("receiver", Model.Receiver.Name) <!--Current logged in username-->
 @section Scripts
 {
 

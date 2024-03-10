@@ -9,8 +9,8 @@ namespace ChatSystem.Models
         public int? SenderId { get; set; }
         public int? ReceiverId { get; set; }
         public int? StatusId { get; set; }
-        public string? SenderConnectionId { get; set; }
-        public string? ReceiverConnectionId { get; set; }
+        //public string? SenderConnectionId { get; set; }
+        //public string? ReceiverConnectionId { get; set; }
 
         // Navigation properties
         [ForeignKey("SenderId")]

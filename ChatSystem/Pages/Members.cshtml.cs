@@ -63,5 +63,64 @@ namespace ChatSystem.Pages
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
             
         }
+
+
+        public IActionResult OnPostStatus(int memberId, int statusId)
+        {
+            string email = HttpContext.Session.GetString(Sessions.Member);
+            Member = _context.Members.SingleOrDefault(m => m.Email == email);
+
+            var invitation = _context.Invitations
+               .FirstOrDefault(inv =>
+               inv.SenderId == memberId && inv.ReceiverId == Member.MemberId);
+
+            if (invitation != null)
+            {
+                invitation.StatusId = statusId;
+                _context.SaveChanges();
+            }
+
+
+            return RedirectToPage();
+        }
+
+
+        public bool HasInvitationSender(int memberId)
+        {
+
+            return _context.Invitations
+                .Any(inv => inv.SenderId == memberId && inv.ReceiverId == Member.MemberId);
+        }
+        public bool HasInvitationReceiver(int memberId)
+        {
+
+            return _context.Invitations
+                .Any(inv => inv.SenderId == Member.MemberId && inv.ReceiverId == memberId);
+        }
+
+        public bool GetInvitationSenderStatus(int memberId)
+        {
+            var invitation = _context.Invitations
+                .FirstOrDefault(inv =>
+                inv.SenderId == memberId && inv.ReceiverId == Member.MemberId);
+            if (invitation != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public int? GetInvitationStatus(int memberId)
+        {
+            var invitation = _context.Invitations
+                .FirstOrDefault(inv => 
+                inv.SenderId == memberId && inv.ReceiverId == Member.MemberId || 
+                inv.SenderId == Member.MemberId && inv.ReceiverId == memberId);
+            if (invitation != null)
+            {
+                return invitation.StatusId;
+            }
+            return 0;
+        }
     }
 }

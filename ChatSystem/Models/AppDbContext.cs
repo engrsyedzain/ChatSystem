@@ -13,6 +13,7 @@ namespace ChatSystem.Models
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<InvitationStatus> InvitationStatus { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<MemberConnection> MemberConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

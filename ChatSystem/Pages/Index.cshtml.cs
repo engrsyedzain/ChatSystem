@@ -21,10 +21,11 @@ namespace ChatSystem.Pages
         [BindProperty]
         public string Error { get; set; }
 
+        public IEnumerable<Member> Members { get; set; }
 
         public void OnGet()
         {
-
+            Members = _context.Members.ToList();
         }
 
 
