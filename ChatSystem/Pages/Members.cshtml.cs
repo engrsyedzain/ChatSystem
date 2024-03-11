@@ -1,5 +1,4 @@
 using ChatSystem.Models;
-using ChatSystem.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -46,6 +45,12 @@ namespace ChatSystem.Pages
                     StatusId = 1,
                 };
 
+                var memberConnection = _context.MemberConnections.SingleOrDefault(m => m.MemberId == currentMember.MemberId);
+                if (memberConnection == null)
+                {
+                    _context.MemberConnections.Add(new MemberConnection { MemberId = currentMember.MemberId });
+                }
+
                 _context.Invitations.Add(model);
                 _context.SaveChanges();
             }
@@ -61,7 +66,9 @@ namespace ChatSystem.Pages
             Members =  _context.Members.Where(m => m.Email != email).ToList();
 
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
+         
             
+
         }
 
 
@@ -69,14 +76,19 @@ namespace ChatSystem.Pages
         {
             string email = HttpContext.Session.GetString(Sessions.Member);
             Member = _context.Members.SingleOrDefault(m => m.Email == email);
-
+            
             var invitation = _context.Invitations
                .FirstOrDefault(inv =>
                inv.SenderId == memberId && inv.ReceiverId == Member.MemberId);
-
+            
             if (invitation != null)
             {
                 invitation.StatusId = statusId;
+                var memberConnection = _context.MemberConnections.SingleOrDefault(m => m.MemberId == Member.MemberId);
+                if (memberConnection == null && statusId == 2)
+                {
+                    _context.MemberConnections.Add(new MemberConnection { MemberId = Member.MemberId });
+                }
                 _context.SaveChanges();
             }
 
